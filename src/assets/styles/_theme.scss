@@ -1,0 +1,199 @@
+body[data-theme='dark'] {
+    background: #2e2d2d;
+
+    .ant-card {
+        background: #1f1f1f;
+        color: #fff;
+        border: 1px solid #333;
+
+        .ant-card-head {
+            background: #181818;
+            color: #fff;
+        }
+
+        .ant-card-body {
+            background: #1f1f1f;
+            color: #fff;
+        }
+    }
+
+    .footer {
+        color: #9f9f9f;
+    }
+
+    .main-sidebar {
+        background: #1f1f1f;
+    }
+
+    .ant-menu.ant-menu-dark {
+        background: #1f1f1f;
+    }
+
+    .header {
+        background: #1f1f1f;
+    }
+
+    .calendar__filter-form-text {
+        color: #fff;
+    }
+
+    .header__logo {
+        filter: brightness(0) invert(1) hue-rotate(180deg);
+    }
+
+    .ant-upload-list-item-name {
+        color: #fff;
+    }
+
+    .ant-upload-icon {
+        svg {
+            fill: #fff;
+        }
+    }
+
+    /* ===== Table ===== */
+    .ant-table {
+        background: #1f1f1f;
+        color: #fff;
+
+        .ant-table-thead>tr>th {
+            background: #181818;
+            color: #fff;
+            border-color: #5e5e5e;
+
+            &::before {
+                background-color: #5e5e5e !important;
+            }
+        }
+
+        .ant-table-placeholder {
+
+            .ant-empty-description {
+                color: #fff;
+            }
+
+            &:hover {
+                td {
+                    background: #1f1f1f !important;
+                }
+            }
+        }
+
+        .ant-table-tbody>tr>td {
+            background: #1f1f1f;
+            color: #fff;
+            border-color: #5e5e5e;
+        }
+
+        .ant-table-tbody>tr.ant-table-row:hover>td {
+            background: #2a2a2a;
+        }
+
+        .ant-table-pagination {
+            background: #1f1f1f;
+            color: #fff;
+
+            .ant-pagination-item,
+            .ant-pagination-prev,
+            .ant-pagination-next {
+                background: #1f1f1f;
+                border-color: #333;
+                color: #fff;
+            }
+
+            .ant-pagination-item-active {
+                background: #333;
+                border-color: #444;
+                color: #fff;
+            }
+        }
+    }
+
+    /* ===== DatePicker ===== */
+    .ant-picker {
+        background: #1f1f1f;
+        color: #fff;
+        border: 1px solid #333;
+
+        &:hover,
+        &:focus {
+            border-color: #646cff;
+        }
+
+        .ant-picker-input>input {
+            background: #1f1f1f;
+            color: #fff;
+        }
+
+        .ant-picker-dropdown {
+            background: #1f1f1f;
+            color: #fff;
+
+            .ant-picker-cell-inner {
+                color: #fff;
+
+                &.ant-picker-cell-today::before {
+                    border-color: #646cff;
+                }
+
+                &.ant-picker-cell-selected,
+                &:hover {
+                    background: #333;
+                    color: #fff;
+                }
+            }
+        }
+
+        .ant-picker-suffix,
+        .ant-picker-clear {
+            svg {
+                fill: #fff;
+            }
+        }
+    }
+
+    /* ===== Calendar ===== */
+    .ant-picker-calendar {
+        background: #1f1f1f;
+        color: #fff;
+        border: 1px solid #333;
+
+        .ant-picker-body {
+            background: #222222;
+        }
+
+        .ant-picker-calendar-header {
+            background: #181818;
+            color: #fff;
+        }
+
+        &:where(.css-dev-only-do-not-override-1odpy5d).ant-picker-calendar .ant-picker-content th {
+            color: #fff;
+        }
+
+        .ant-picker-content {
+            thead {
+                color: #fff !important;
+
+                tr {
+                    font-weight: bold;
+
+                }
+            }
+        }
+
+        .ant-picker-cell-inner {
+            color: #fff;
+
+            &.ant-picker-cell-today::before {
+                border-color: #646cff;
+            }
+
+            &.ant-picker-cell-selected,
+            &:hover {
+                background: #333;
+                color: #fff;
+            }
+        }
+    }
+}

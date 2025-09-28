@@ -1,0 +1,56 @@
+.footer {
+    padding: 10px 0 20px;
+    font-size: 11px;
+    color: #545454;
+
+    &-team {
+        font-weight: 500;
+    }
+
+    &-title {
+        margin-bottom: 15px;
+    }
+
+    &-names {
+        text-align: center;
+
+        &__list {
+            padding: 0;
+            margin: 0;
+            justify-content: center;
+            list-style-type: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+    }
+
+    &-logo {
+        filter: brightness(0) opacity(0.3);
+        max-height: 40px;
+
+        &--404 {
+            position: relative;
+            top: -10px;
+        }
+    }
+
+    &-logos {
+        margin-top: 25px;
+        display: flex;
+        gap: 15px;
+        align-items: center;
+        justify-content: center;
+    }
+
+    @media (min-width: 768px) {
+        font-size: 12px;
+        padding: 10px 0 30px;
+
+        &-names {
+            &__list {
+                gap: 32px;
+            }
+        }
+    }
+}

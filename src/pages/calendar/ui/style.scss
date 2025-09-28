@@ -1,0 +1,72 @@
+.calendar {
+    &__filter-form {
+        @media(min-width: 992px) {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        &-item {
+            cursor: pointer;
+            user-select: none !important;
+        }
+
+        &-label {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            justify-content: flex-end;
+        }
+    }
+
+    &-rate {
+        /* max-height: 0;
+        opacity: 0;
+        overflow: hidden;
+        pointer-events: none;
+        transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+
+        &--opened {
+            max-height: 500px;
+            opacity: 1;
+            pointer-events: all;
+        } */
+    }
+}
+
+
+// Стили для анимированных чисел
+.animated-number {
+    &--increasing {
+        color: #52c41a; // Зеленый при увеличении
+    }
+    
+    &--decreasing {
+        color: #ff4d4f; // Красный при уменьшении
+    }
+
+    &__values {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    &__old-value {
+        font-size: 0.8em;
+        color: #9c9c9c;
+    }
+}
+
+// Анимация для плавного изменения значений
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.animated-number {
+    transition: color 0.3s ease;
+    
+    /* &:hover {
+        animation: pulse 0.5s ease-in-out;
+    } */
+}

@@ -1,0 +1,102 @@
+.main-layout {
+    padding-top: 60px;
+    box-sizing: border-box;
+    padding: 15px;
+    padding-top: 0;
+
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+
+    &__container {
+        max-width: 1400px;
+        padding: 0 15px;
+        margin: 0 auto;
+
+        &--fluid {
+            max-width: 100%;
+
+            @media (min-width: 768px) {
+                padding: 0 32px;
+            }
+        }
+    }
+
+    &__content {
+        align-items: flex-start;
+        margin-top: 95px;
+        padding-bottom: 20px;
+        display: flex;
+        flex: 1 0 auto;
+        gap: 32px;
+
+        @media(min-width: 992px) {
+            margin-top: 40px;
+        }
+    }
+
+    &__body {
+        width: 100%;
+        flex: 1;
+        box-sizing: border-box;
+        padding: 0 20px;
+
+        @media (min-width: 992px) {
+            width: calc(100% - 256px);
+        }
+    }
+
+    @media(min-width: 992px) {
+        padding: 60px 0 0 0;
+    }
+}
+
+.main-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 0;
+    z-index: 99;
+
+    min-height: 300px;
+    background: #fff;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+    &__btn-wrap {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 15px;
+        padding: 0 15px;
+    }
+
+    @media(max-width: 992px) {
+        padding: 20px 0;
+        transition: transform .25s ease-in;
+        transform: translateX(-200%);
+
+        .ant-menu {
+            width: 100%;
+        }
+
+        &--opened {
+            transform: translateX(0);
+        }
+    }
+
+    @media(min-width: 992px) {
+        position: relative;
+        display: block;
+        position: sticky;
+        top: 90px;
+        border-top-right-radius: 20px;
+        border-bottom-right-radius: 20px;
+
+        .ant-menu {
+            min-width: 256px;
+            max-width: 256px;
+        }
+    }
+}

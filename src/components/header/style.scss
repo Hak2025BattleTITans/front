@@ -1,0 +1,56 @@
+.header {
+    position: fixed;
+    z-index: 99;
+    top: 0;
+    left: 0;
+    right: 0;
+    //background: #fff;
+    background: #4794ff;
+    height: 70px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+    .main-layout__container {
+        height: 100%;
+        display: flex;
+        align-items: center;
+    }
+
+    &__program-logo {
+        max-height: 40px;
+    }
+
+    &__logo {
+        max-height: 32px;
+
+        @media(min-width: 768px) {
+            max-height: 42px;
+        }
+    }
+
+    &__col {
+        display: flex;
+        align-items: center;
+
+        &--center {
+            justify-content: center;
+        }
+
+        &--left {
+            justify-content: left;
+        }
+
+        &--right {
+            justify-content: right;
+        }
+    }
+
+    &__center {
+        text-align: center;
+    }
+
+    &__actions {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+    }
+}

@@ -1,0 +1,10 @@
+.chart-card {
+    &__body {
+        height: 250px;
+        padding: 15px 0 !important;
+
+        @media(min-width: 768px) {
+            height: 400px;
+        }
+    }
+}

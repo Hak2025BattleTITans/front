@@ -1,5 +1,6 @@
 import type { ScheduleItem } from '@/types';
 import { Button, Card, Empty, Modal, Table, Tag, Tooltip } from 'antd';
+import dayjs from 'dayjs';
 import { Fullscreen } from 'lucide-react';
 import React from 'react';
 
@@ -14,7 +15,10 @@ interface Props {
 const renderDiff = (
     value: any,
     optimizedValue: any,
-    showOptimized?: boolean
+    showOptimized?: boolean,
+    params?: {
+        sameColor?: boolean
+    }
 ) => {
     if (!showOptimized || value === optimizedValue) {
         return value;
@@ -22,12 +26,17 @@ const renderDiff = (
 
     const increased = optimizedValue > value;
 
+    const getColor = () => {
+        if (params?.sameColor) return '#52c41a';
+        return increased ? '#52c41a' : '#df3d28ff';
+    }
+
     return (
         <span style={{ display: 'inline-flex', flexDirection: 'column' }}>
             <span style={{ textDecoration: 'line-through', color: '#999' }}>
                 {value}
             </span>
-            <span style={{ color: increased ? '#52c41a' : '#df3d28ff' }}>
+            <span style={{ color: getColor() }}>
                 {optimizedValue}
             </span>
         </span>
@@ -43,7 +52,21 @@ export const ScheduleTable: React.FC<Props> = ({
     const [modalVisible, setModalVisible] = React.useState(false);
 
     const columns = [
-        { dataIndex: 'date', title: 'Дата вылета' },
+        {
+            dataIndex: 'date',
+            title: 'Дата вылета',
+            render: (value: string) => {
+                if (!value) return value;
+
+                const date = dayjs(value);
+
+                if (date.isValid()) {
+                    return date.format('DD.MM.YYYY');
+                } else {
+                    return value;
+                }
+            }
+        },
         { dataIndex: 'flight_number', title: 'Номер рейса' },
         {
             dataIndex: 'dep_airport',
@@ -55,8 +78,28 @@ export const ScheduleTable: React.FC<Props> = ({
             title: 'Аэропорт прилёта',
             render: (value: any) => <Tag color="blue">{value}</Tag>,
         },
-        { dataIndex: 'dep_time', title: 'Время вылета' },
-        { dataIndex: 'arr_time', title: 'Время прилёта' },
+        {
+            dataIndex: 'dep_time',
+            title: 'Время вылета',
+            render: (_: any, record: ScheduleItem, index: number) =>
+                renderDiff(
+                    record.dep_time,
+                    optimizedDataSource?.[index]?.dep_time,
+                    showOptimized,
+                    { sameColor: true, },
+                ),
+        },
+        {
+            dataIndex: 'arr_time',
+            title: 'Время прилёта',
+            render: (_: any, record: ScheduleItem, index: number) =>
+                renderDiff(
+                    record.arr_time,
+                    optimizedDataSource?.[index]?.arr_time,
+                    showOptimized,
+                    { sameColor: true, },
+                ),
+        },
         {
             dataIndex: 'flight_capacity',
             title: 'Ёмкость кабины',

@@ -1,25 +1,31 @@
 import clsx from "clsx";
 import React from "react";
 
-export const AnimatedNumber: React.FC<{ value: number; oldValue?: number, format?: 'number' | 'currency' }> = ({
+export const AnimatedNumber: React.FC<{ value: number; defaultValue: number, showOptimized?: boolean, format?: 'number' | 'currency' }> = ({
     value,
-    oldValue,
+    defaultValue,
+    showOptimized,
     format = 'number'
 }) => {
-    const [displayValue, setDisplayValue] = React.useState(value);
+    const [displayValue, setDisplayValue] = React.useState(defaultValue);
     const [_, setIsAnimating] = React.useState(false);
 
     React.useEffect(() => {
+        if (!showOptimized) {
+            setDisplayValue(defaultValue);
+            return;
+        }
+
         setIsAnimating(true);
         const startTime = Date.now();
-        const duration = 800; // длительность анимации в ms
-        const startValue = displayValue;
+        const duration = 800; // ms
+        const startValue = defaultValue;
 
         const animate = () => {
             const now = Date.now();
             const progress = Math.min((now - startTime) / duration, 1);
 
-            // easing function для плавности
+            // easing
             const easeOutQuart = 1 - Math.pow(1 - progress, 4);
             const currentValue = startValue + (value - startValue) * easeOutQuart;
 
@@ -33,7 +39,7 @@ export const AnimatedNumber: React.FC<{ value: number; oldValue?: number, format
         };
 
         requestAnimationFrame(animate);
-    }, [value]);
+    }, [showOptimized, value, defaultValue]);
 
     const formatNumber = (num: number): string => {
         if (format === 'currency') {
@@ -59,10 +65,19 @@ export const AnimatedNumber: React.FC<{ value: number; oldValue?: number, format
             }}
         >
             <div className='animated-number__values'>
-                {(typeof oldValue === 'number' && oldValue > 0 && oldValue !== displayValue) && (
-                    <span className='animated-number__old-value'>{formatNumber(oldValue)}</span>
-                )}
-                <span className='animated-number__new-value'>{formatNumber(displayValue)}</span>
+                {!showOptimized && (
+                    <span className='animated-number__new-value'>
+                        {formatNumber(defaultValue)}
+                    </span>)
+                }
+                {showOptimized && (
+                    <>
+                        <span className='animated-number__old-value'>
+                            {formatNumber(defaultValue)} </span>
+                        <span className='animated-number__new-value'>
+                            {formatNumber(displayValue)}
+                        </span>
+                    </>)}
             </div>
         </div>
     );

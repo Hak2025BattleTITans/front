@@ -1,2 +1,18 @@
 @use "./media";
 @use "./theme";
+
+.js-plotly-plot {
+    max-width: 100% !important;
+}
+
+.plot-container .plotly {
+    max-width: 100% !important;
+}
+
+.user-select-none .svg-container {
+    max-width: 100% !important;
+
+    .main-svg {
+        max-width: 100% !important;
+    }
+}

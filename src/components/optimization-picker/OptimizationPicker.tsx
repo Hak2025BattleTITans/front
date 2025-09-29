@@ -9,8 +9,8 @@ interface Props {
 }
 
 const ALGORITHMS: OptimizationAlgorithm[] = [
-    { id: 'genetic', name: 'Оптимизация перемещением временных слотов' },
-    { id: 'pso', name: 'Оптимизация овербукинга' },
+    { id: 'ranking', name: 'Оптимизация перемещением временных слотов' },
+    { id: 'overbooking', name: 'Оптимизация овербукинга', disabled: true,},
 ];
 
 export const OptimizationPicker: React.FC<Props> = ({ onChange, selected = [] }) => {
@@ -119,6 +119,7 @@ export const OptimizationPicker: React.FC<Props> = ({ onChange, selected = [] })
                                             <Checkbox
                                                 key={algorithm.id}
                                                 value={algorithm.id}
+                                                disabled={algorithm.disabled}
                                                 className="optimized-picker__checkbox"
                                             >
                                                 {algorithm.name}
@@ -138,6 +139,7 @@ export const OptimizationPicker: React.FC<Props> = ({ onChange, selected = [] })
                                             <Checkbox
                                                 key={algorithm.id}
                                                 value={algorithm.id}
+                                                disabled={algorithm.disabled}
                                                 className="optimized-picker__checkbox"
                                             >
                                                 {algorithm.name}

@@ -1,81 +1,40 @@
 import React from 'react';
 import { Card, Col, Row, } from 'antd';
-import { BigChart } from '../../../features/big-chart';
-import { BarChartCard } from '../../../features/bar-chart';
-import { PieChartCard } from '../../../features/pie-chart';
 import { RussianRuble, Tickets, Users, } from 'lucide-react';
 import { useSession } from '@/providers';
+import Plot from 'react-plotly.js';
+import { MetricCard } from '@/components';
 
 interface Props {
     className?: string;
 }
 
-const dataBar = [
-    {
-        name: 'Page A',
-        uv: 4000,
-        pv: 2400,
-        amt: 2400,
-    },
-    {
-        name: 'Page B',
-        uv: 3000,
-        pv: 1398,
-        amt: 2210,
-    },
-    {
-        name: 'Page C',
-        uv: 2000,
-        pv: 9800,
-        amt: 2290,
-    },
-    {
-        name: 'Page D',
-        uv: 2780,
-        pv: 3908,
-        amt: 2000,
-    },
-    {
-        name: 'Page E',
-        uv: 1890,
-        pv: 4800,
-        amt: 2181,
-    },
-    {
-        name: 'Page F',
-        uv: 2390,
-        pv: 3800,
-        amt: 2500,
-    },
-    {
-        name: 'Page G',
-        uv: 3490,
-        pv: 4300,
-        amt: 2100,
-    },
-];
+/* const formatNumber = (num: number, format: "number" | "currency" = 'number'): string => {
+    if (format === 'currency') {
+        return new Intl.NumberFormat('ru-RU', {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0
+        }).format(num) + ' ₽';
+    }
 
-const pieData = [
-    { name: 'Group A', value: 400 },
-    { name: 'Group B', value: 300 },
-    { name: 'Group C', value: 300 },
-    { name: 'Group D', value: 200 },
-];
-
-const formatNumber = (num: number, format: "number" | "currency" = 'number'): string => {
-        if (format === 'currency') {
-            return new Intl.NumberFormat('ru-RU', {
-                minimumFractionDigits: 0,
-                maximumFractionDigits: 0
-            }).format(num) + ' ₽';
-        }
-
-        return new Intl.NumberFormat('ru-RU').format(num);
-    };
+    return new Intl.NumberFormat('ru-RU').format(num);
+}; */
 
 export const Home: React.FC<Props> = () => {
     const { session, } = useSession();
-    const metrics = React.useMemo(() => session?.main_metrics, [session?.main_metrics])
+    const metrics = React.useMemo(() => session?.main_metrics, [session?.main_metrics]);
+
+    const [p1, p2, p3] = session?.plots?.plots || [];
+    const [op1, op2, op3] = session?.plots?.optimized_plots || [];
+
+    const getChange = (unoptimized: number, optimized: number) => {
+        if (unoptimized === 0 && optimized === 0) return 0;
+        if (unoptimized === 0) return optimized > 0 ? 100 : -100;
+
+        const change = ((optimized - unoptimized) / unoptimized) * 100;
+
+        return Math.round(change * 100) / 100;
+    }
 
     return (
         <Row gutter={[32, 32]}>
@@ -84,69 +43,119 @@ export const Home: React.FC<Props> = () => {
                     <Row gutter={[16, 16]}>
                         {/* 1. Общий доход за представленный период */}
                         <Col xs={24} lg={8}>
-                            <Card variant='borderless' title="Общий доход">
-                                <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                                    <RussianRuble size={28} color="#1677ff" />
-                                    <div>
-                                        <div style={{ fontSize: 24, fontWeight: 600 }}>{formatNumber(metrics.income.value, 'currency')}</div>
-                                        {/* <div style={{ color: "#52c41a", display: "flex", alignItems: "center", gap: 4 }}>
-                                            <TrendingUp size={16} />
-                                            +8.3%
-                                        </div> */}
-                                    </div>
-                                </div>
-                            </Card>
+                            <MetricCard
+                                title='Общий доход'
+                                defaultValue={metrics.income.value}
+                                optimizedValue={metrics.income.optimized_value}
+                                format='currency'
+                                icon={<RussianRuble size={28} color="#1677ff" />}
+                                showOptimized={metrics.income.optimized_value !== 0 && metrics.income.value !== metrics.income.optimized_value}
+                                change={getChange(metrics.income.value, metrics.income.optimized_value)}
+
+                            />
                         </Col>
 
                         {/* 2. Средний чек */}
                         <Col xs={24} lg={8}>
-                            <Card variant='borderless' title="Средний чек">
-                                <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                                    <Tickets size={28} color="#1677ff" />
-                                    <div>
-                                        <div style={{ fontSize: 24, fontWeight: 600 }}>{formatNumber(metrics.avg_check.value, 'currency')}</div>
-                                        {/* <div style={{ color: "#52c41a", display: "flex", alignItems: "center", gap: 4 }}>
-                                            <TrendingUp size={16} />
-                                            +2.1%
-                                        </div> */}
-                                    </div>
-                                </div>
-                            </Card>
+                            <MetricCard
+                                title='Средний чек'
+                                defaultValue={metrics.avg_check.value}
+                                optimizedValue={metrics.avg_check.optimized_value}
+                                format='currency'
+                                icon={<Tickets size={28} color="#1677ff" />}
+                                showOptimized={metrics.avg_check.optimized_value !== 0 && metrics.avg_check.value !== metrics.avg_check.optimized_value}
+                                change={getChange(metrics.avg_check.value, metrics.avg_check.optimized_value)}
+
+                            />
                         </Col>
 
-                        {/* 3. Количество упущенных продаж */}
+                        {/* 3. Пассажиропоток */}
                         <Col xs={24} lg={8}>
-                            <Card variant='borderless' title="Пассажиропоток">
-                                <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                                    {/* <XCircle size={28} color="#ff4d4f" /> */}
-                                    <Users size={28} color="#1677ff"/>
-                                    <div>
-                                        <div style={{ fontSize: 24, fontWeight: 600 }}>{formatNumber(metrics.passengers.value)}</div>
-                                        {/* <div style={{ color: "#ff4d4f", display: "flex", alignItems: "center", gap: 4 }}>
-                                            <TrendingDown size={16} />
-                                            -5.2%
-                                        </div> */}
-                                    </div>
-                                </div>
-                            </Card>
+                            <MetricCard
+                                title='Пассажиропоток'
+                                defaultValue={metrics.passengers.value}
+                                optimizedValue={metrics.passengers.optimized_value}
+                                format='number'
+                                icon={<Users size={28} color="#1677ff" />}
+                                showOptimized={metrics.passengers.optimized_value !== 0 && metrics.passengers.value !== metrics.passengers.optimized_value}
+                                change={getChange(metrics.passengers.value, metrics.passengers.optimized_value)}
+                                lessThenBetter
+                            />
                         </Col>
                     </Row>
                 </Col>
             )}
 
 
+            {/* Динамика дохода по коду кабины */}
             <Col xs={24} md={24} xl={12}>
-                <BigChart />
-            </Col>
-
-            <Col xs={24} sm={12} xl={6}>
-                <Card title="График 1" variant="borderless" style={{ width: `100%` }} styles={{ body: { padding: 10, height: 200 } }}>
-                    <BarChartCard data={dataBar} />
+                <Card title="Неоптимизированный" variant='borderless' styles={{ body: { padding: 5 } }}>
+                    {p2 && (
+                        <Plot
+                            data={p2.data}
+                            layout={p2.layout}
+                        />
+                    )}
                 </Card>
             </Col>
-            <Col xs={24} sm={12} xl={6}>
-                <Card title="График 2" variant="borderless" style={{ width: `100%` }} styles={{ body: { padding: 0, height: 200, } }}>
-                    <PieChartCard data={pieData} />
+
+            <Col xs={24} sm={12} xl={12}>
+                <Card title="Оптимизированный" variant="borderless" style={{ width: `100%` }} styles={{ body: { padding: 10, } }}>
+                    {op2 && (
+                        <Plot
+                            data={op2.data}
+                            layout={op2.layout}
+                        />
+                    )}
+                </Card>
+            </Col>
+
+
+            {/* Динамика пассажиропотока по коду кабины */}
+            <Col xs={24} sm={12} xl={12}>
+                <Card title="Неоптимизированный" variant='borderless' styles={{ body: { padding: 5 } }}>
+                    {p3 && (
+                        <Plot
+                            data={p3.data}
+                            layout={p3.layout}
+                        />
+                    )}
+                </Card>
+            </Col>
+
+            <Col xs={24} sm={12} xl={12}>
+                <Card title="Оптимизированный" variant='borderless' styles={{ body: { padding: 5 } }}>
+                    {op3 && (
+                        <Plot
+                            data={op3.data}
+                            layout={op3.layout}
+                        />
+                    )}
+                </Card>
+            </Col>
+
+            {/* средний чек по коду кабины */}
+            <Col xs={24} sm={12} xl={12}>
+                <Card title="Неоптимизированный" variant="borderless" style={{ width: `100%` }} styles={{ body: { padding: 0, } }}>
+                    {p1 && (
+                        <Plot
+                            data={p1.data}
+                            layout={p1.layout}
+                        />
+                    )}
+
+                </Card>
+            </Col>
+
+            <Col xs={24} sm={12} xl={12}>
+                <Card title="Оптимизированный" variant="borderless" style={{ width: `100%` }} styles={{ body: { padding: 0, } }}>
+                    {op1 && (
+                        <Plot
+                            data={op1.data}
+                            layout={op1.layout}
+                        />
+                    )}
+
                 </Card>
             </Col>
 

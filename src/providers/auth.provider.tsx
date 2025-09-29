@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
 import axiosBase from '../config/axios';
+import { ALGORITHM_STORAGE_KEY } from '@/types';
 
 interface Props {
     children?: ReactNode
@@ -73,6 +74,7 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
         setUser(null);
         setAuthToken(null);
         window.localStorage.removeItem('session');
+        window.localStorage.removeItem(ALGORITHM_STORAGE_KEY);
         axiosBase.defaults.headers.common['x-session-id'] = undefined;
         delete axiosBase.defaults.headers.common['x-session-id'];
     };

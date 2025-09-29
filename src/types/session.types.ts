@@ -38,4 +38,15 @@ export interface SessionData {
     unoptimized_schedule: ScheduleItem[];
     optimized_schedule: ScheduleItem[];
     iframes: ReportItem[];
+    plots: {
+        optimized_plots: PlotItem[],
+        plots: PlotItem[],
+    }
 }
+
+export interface PlotItem {
+    data: any,
+    layout: any
+}
+
+export const ALGORITHM_STORAGE_KEY = 'opt_algorithms'

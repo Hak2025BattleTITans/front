@@ -80,5 +80,6 @@ export const useSessionLoader = () => {
         session,
         loading,
         sessionEmpty,
+        refetch: fetchSession,
     }
 }

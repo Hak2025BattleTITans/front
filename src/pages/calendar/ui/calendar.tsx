@@ -16,6 +16,7 @@ import { debounce } from 'lodash'
 import { ALGORITHM_STORAGE_KEY } from '@/types';
 import axiosBase from '@/config/axios';
 import { useSearchParams } from 'react-router-dom';
+import { useSessionLoader } from '@/features/session/session-loader'
 
 interface Props {
     className?: string;
@@ -32,6 +33,8 @@ export const CalendarPage: React.FC<Props> = () => {
     const { session, } = useSession();
 
     const [searchParams, setSearchParams] = useSearchParams();
+
+    const { refetch, loading: sessionLoading } = useSessionLoader();
 
     // --- 1. Инициализация даты из query ---
     React.useEffect(() => {
@@ -143,10 +146,7 @@ export const CalendarPage: React.FC<Props> = () => {
             try {
                 setLoading(true);
                 await axiosBase.post('/api/v1/optimize', params);
-
-                setTimeout(() => {
-                    window.location.reload();
-                }, 100)
+                await refetch();
             } catch (err) {
                 message.warning('Не удалось оптимизировать расписание');
             } finally {
@@ -207,7 +207,7 @@ export const CalendarPage: React.FC<Props> = () => {
 
     return (
         <Row gutter={[32, 32]}>
-            <Spin spinning={loading}>
+            <Spin spinning={loading || sessionLoading}>
                 <Col xs={24}>
                     {date && (
                         <div style={{ marginBottom: 20 }}>

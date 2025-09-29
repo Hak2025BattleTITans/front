@@ -1,4 +1,4 @@
-import { Alert, Button, Calendar, Card, Col, DatePicker, Form, message, Row, Space, Spin, Switch, Tooltip } from 'antd';
+import { Alert, Button, Calendar, Card, Col, DatePicker, Form, message, Row, Space, Switch, Tooltip } from 'antd';
 import React, { useCallback, useMemo } from 'react';
 import { ScheduleTable } from '../../../features/schedule-table';
 import './style.scss'

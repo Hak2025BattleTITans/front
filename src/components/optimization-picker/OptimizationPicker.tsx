@@ -10,7 +10,7 @@ interface Props {
 
 const ALGORITHMS: OptimizationAlgorithm[] = [
     { id: 'ranking', name: 'Оптимизация перемещением временных слотов' },
-    { id: 'overbooking', name: 'Оптимизация овербукинга' },
+    { id: 'overbooking', name: 'Оптимизация овербукинга', disabled: true },
 ];
 
 export const OptimizationPicker: React.FC<Props> = ({ onChange, selected = [] }) => {

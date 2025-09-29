@@ -20,6 +20,73 @@ interface Props {
     return new Intl.NumberFormat('ru-RU').format(num);
 }; */
 
+
+const useIsMobile = () => {
+    const [isMobile, setIsMobile] = React.useState(false);
+
+    React.useEffect(() => {
+        const checkDevice = () => {
+            setIsMobile(window.innerWidth <= 768);
+        };
+
+        checkDevice();
+        window.addEventListener('resize', checkDevice);
+
+        return () => window.removeEventListener('resize', checkDevice);
+    }, []);
+
+    return isMobile;
+};
+
+const ResponsivePlot = ({ data, layout }: any) => {
+    const isMobile = useIsMobile();
+
+    const mobileLayout = {
+        ...layout,
+        autosize: true,
+        width: undefined,
+        height: undefined,
+        margin: {
+            l: 40,
+            r: 20,
+            b: 40,
+            t: 40,
+            pad: 2
+        },
+        font: {
+            size: 10
+        },
+        legend: {
+            font: { size: 10 },
+            orientation: isMobile ? 'h' : 'v', // Горизонтальная легенда на мобилках
+            x: 0,
+            y: -0.2,
+            xanchor: 'left',
+            yanchor: 'top'
+        }
+    };
+
+    return (
+        <Plot
+            data={data}
+            layout={isMobile ? mobileLayout : layout}
+            config={{
+                responsive: true,
+                displayModeBar: true,
+                displaylogo: false,
+                modeBarButtonsToRemove: isMobile
+                    ? ['pan2d', 'lasso2d', 'select2d', 'zoomIn2d', 'zoomOut2d']
+                    : ['pan2d', 'lasso2d', 'select2d'],
+            }}
+            style={{
+                width: '100%',
+                height: 'auto',//isMobile ? '250px' : 'auto',
+                minHeight: '400px'
+            }}
+        />
+    );
+};
+
 export const Home: React.FC<Props> = () => {
     const { session, } = useSession();
     const metrics = React.useMemo(() => session?.main_metrics, [session?.main_metrics]);
@@ -35,6 +102,8 @@ export const Home: React.FC<Props> = () => {
 
         return Math.round(change * 100) / 100;
     }
+
+    console.log(p1)
 
     return (
         <Row gutter={[32, 32]}>
@@ -91,20 +160,32 @@ export const Home: React.FC<Props> = () => {
             <Col xs={24} md={24} xl={12}>
                 <Card title="Неоптимизированный" variant='borderless' styles={{ body: { padding: 5 } }}>
                     {p2 && (
-                        <Plot
+                        <ResponsivePlot
                             data={p2.data}
                             layout={p2.layout}
+                            config={{
+                                responsive: true,
+                                displayModeBar: true,
+                                displaylogo: false,
+                                modeBarButtonsToRemove: ['pan2d', 'lasso2d', 'select2d'],
+                            }}
                         />
                     )}
                 </Card>
             </Col>
 
-            <Col xs={24} sm={12} xl={12}>
+            <Col xs={24} sm={24} xl={12}>
                 <Card title="Оптимизированный" variant="borderless" style={{ width: `100%` }} styles={{ body: { padding: 10, } }}>
                     {op2 && (
-                        <Plot
+                        <ResponsivePlot
                             data={op2.data}
                             layout={op2.layout}
+                            config={{
+                                responsive: true,
+                                displayModeBar: true,
+                                displaylogo: false,
+                                modeBarButtonsToRemove: ['pan2d', 'lasso2d', 'select2d'],
+                            }}
                         />
                     )}
                 </Card>
@@ -112,47 +193,71 @@ export const Home: React.FC<Props> = () => {
 
 
             {/* Динамика пассажиропотока по коду кабины */}
-            <Col xs={24} sm={12} xl={12}>
+            <Col xs={24} sm={24} xl={12}>
                 <Card title="Неоптимизированный" variant='borderless' styles={{ body: { padding: 5 } }}>
                     {p3 && (
-                        <Plot
+                        <ResponsivePlot
                             data={p3.data}
                             layout={p3.layout}
+                            config={{
+                                responsive: true,
+                                displayModeBar: true,
+                                displaylogo: false,
+                                modeBarButtonsToRemove: ['pan2d', 'lasso2d', 'select2d'],
+                            }}
                         />
                     )}
                 </Card>
             </Col>
 
-            <Col xs={24} sm={12} xl={12}>
+            <Col xs={24} sm={24} xl={12}>
                 <Card title="Оптимизированный" variant='borderless' styles={{ body: { padding: 5 } }}>
                     {op3 && (
-                        <Plot
+                        <ResponsivePlot
                             data={op3.data}
                             layout={op3.layout}
+                            config={{
+                                responsive: true,
+                                displayModeBar: true,
+                                displaylogo: false,
+                                modeBarButtonsToRemove: ['pan2d', 'lasso2d', 'select2d'],
+                            }}
                         />
                     )}
                 </Card>
             </Col>
 
             {/* средний чек по коду кабины */}
-            <Col xs={24} sm={12} xl={12}>
+            <Col xs={24} sm={24} xl={12}>
                 <Card title="Неоптимизированный" variant="borderless" style={{ width: `100%` }} styles={{ body: { padding: 0, } }}>
                     {p1 && (
-                        <Plot
+                        <ResponsivePlot
                             data={p1.data}
                             layout={p1.layout}
+                            config={{
+                                responsive: true,
+                                displayModeBar: true,
+                                displaylogo: false,
+                                modeBarButtonsToRemove: ['pan2d', 'lasso2d', 'select2d'],
+                            }}
                         />
                     )}
 
                 </Card>
             </Col>
 
-            <Col xs={24} sm={12} xl={12}>
+            <Col xs={24} sm={24} xl={12}>
                 <Card title="Оптимизированный" variant="borderless" style={{ width: `100%` }} styles={{ body: { padding: 0, } }}>
                     {op1 && (
-                        <Plot
+                        <ResponsivePlot
                             data={op1.data}
                             layout={op1.layout}
+                            config={{
+                                responsive: true,
+                                displayModeBar: true,
+                                displaylogo: false,
+                                modeBarButtonsToRemove: ['pan2d', 'lasso2d', 'select2d'],
+                            }}
                         />
                     )}
 

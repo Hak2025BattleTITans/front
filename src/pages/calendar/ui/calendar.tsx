@@ -9,7 +9,7 @@ import type { OptimizationAlgorithm } from '../../../components/optimization-pic
 import { useSession } from '@/providers';
 import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
-import { AnimatedNumber } from '@/components';
+import { AnimatedNumber, LoadingWithTimer } from '@/components';
 import { FlightDateCell } from '@/components/FlightDateCell';
 import { calculateAverageTicket, calculateTotalIncome, calculateTotalPassengers } from '../model';
 import { debounce } from 'lodash'
@@ -145,7 +145,7 @@ export const CalendarPage: React.FC<Props> = () => {
         const optimizeCallback = async () => {
             try {
                 setLoading(true);
-                await axiosBase.post('/api/v1/optimize', params);
+                await axiosBase.post('/optimize', params);
                 await refetch();
             } catch (err) {
                 message.warning('Не удалось оптимизировать расписание');
@@ -207,7 +207,7 @@ export const CalendarPage: React.FC<Props> = () => {
 
     return (
         <Row gutter={[32, 32]}>
-            <Spin spinning={loading || sessionLoading}>
+            <LoadingWithTimer spinning={loading || sessionLoading}>
                 <Col xs={24}>
                     {date && (
                         <div style={{ marginBottom: 20 }}>
@@ -479,7 +479,7 @@ export const CalendarPage: React.FC<Props> = () => {
                         )
                     }
                 </Col>
-            </Spin>
+            </LoadingWithTimer>
         </Row>
     );
 };

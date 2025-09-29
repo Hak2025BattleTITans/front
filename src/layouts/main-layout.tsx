@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import './style.scss'
-import { Header } from '../components';
+import { Header, LoadingWithTimer } from '../components';
 import { Alert, Col, Divider, Menu, Row, Spin, type MenuProps } from 'antd';
 import { DashboardOutlined, CalendarOutlined, UploadOutlined, LogoutOutlined } from '@ant-design/icons';
 import { Link, Outlet, useLocation, } from 'react-router-dom';
@@ -85,7 +85,7 @@ export const MainLayout: React.FC<Props> = ({ }) => {
 
     return (
         <div className="main-layout">
-            <Spin spinning={sessionLoading}>
+            <LoadingWithTimer spinning={sessionLoading}>
                 <Header />
                 <div className='main-layout__content'>
                     {sessionEmpty
@@ -147,7 +147,7 @@ export const MainLayout: React.FC<Props> = ({ }) => {
                 </div>
 
                 <Footer />
-            </Spin>
+            </LoadingWithTimer>
         </div>
     );
 };

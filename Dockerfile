@@ -1,28 +1,21 @@
-
 # Этап сборки
-FROM node:18-alpine AS build
+FROM node:20-alpine AS build
 
 WORKDIR /app
 
-# Скопировать package.json и package-lock.json
+# 1) тянем lock-файл и ставим ВСЕ зависимости (включая dev)
 COPY package*.json ./
+RUN npm ci
 
-# Установить зависимости
-RUN npm install
-
-# Скопировать остальные файлы и собрать проект
+# 2) копируем код и билдим
 COPY . .
 RUN npm run build
 
-# Этап запуска (Nginx для отдачи статики)
+# Этап запуска (Nginx)
 FROM nginx:stable-alpine
 
-# Удаляем дефолтную конфигурацию и копируем свою (по желанию)
 COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-# Копируем собранное приложение в папку nginx
 COPY --from=build /app/dist /usr/share/nginx/html
 
 EXPOSE 80
-
 CMD ["nginx", "-g", "daemon off;"]

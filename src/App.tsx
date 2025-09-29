@@ -1,7 +1,7 @@
 import React from 'react';
 import { Home } from './pages';
 import { ConfigProvider } from 'antd';
-import ruRu from 'antd/locale/ru_Ru';
+import ruRu from 'antd/locale/ru_RU';
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { MainLayout } from './layouts';
 import { CalendarPage } from './pages/calendar';
